@@ -64,8 +64,8 @@ export async function POST(request){
   }
 ```
 
-
 ## Updating an Object
+
 - validate the request body
 - If invalid, return 400
 - Fetch the user with the given id
@@ -79,7 +79,7 @@ export async function POST(request){
 import { NextRequest } from 'next/server'
 
 export async function PUT(request,{params}:{params:{id:number}){
-  
+
   if(!body.name)
     return NextRequest.json({error:'Name is required'},{status:400});
 
@@ -87,6 +87,28 @@ export async function PUT(request,{params}:{params:{id:number}){
     return NextRequest.json({error:'User Not Found'},{status:404});
 
   return NextRequest.json({id:1,name:body.name},{status:200});
+
+  }
+```
+
+## Deleting an Object
+
+- Fetch the user from db
+- If NotFound , return 404
+- Delete the user
+- Return 200
+
+---
+
+```bash
+import { NextRequest } from 'next/server'
+
+export async function DELETE(request,{params}:{params:{id:number}){
+
+  if(params.id>10)
+    return NextRequest.json({error:'User Not Found'},{status:404});
+
+  return NextRequest.json({},{status:200});
 
   }
 ```
