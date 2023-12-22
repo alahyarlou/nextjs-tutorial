@@ -18,10 +18,10 @@ we first talk about `GET` method:
 import {NextResponse} from 'next/server'
 
 export function GET(request){
-    return NextResponse.json([
-    {id:1,name:'Mosh'},
-    {id:2,name:'ali'}
-    ])
+  return NextResponse.json([
+  {id:1,name:'Mosh'},
+  {id:2,name:'ali'}
+  ])
   }
 ```
 
@@ -30,11 +30,36 @@ export function GET(request){
 create dynamic route for example: Folder([id])
 
 ```bash
-import {NextRequest} from 'next/server'
+import { NextRequest } from 'next/server'
 
 export function GET(request,{params}:{params:{id:number}){
-    // fetching data from a db
-    // If notFound retrun 404 an error
-    // else return data
+  // fetching data from a db
+  // If notFound retrun 404 an error
+  // else return data
+
+  if(params.id>10)
+    return NextRequest.json({error:'User Not Found'},{status:404});
+
+  return NextRequest.json({id:1,name:'Mosh'});
+  }
+```
+
+## Creating an Object
+
+```bash
+import { NextRequest } from 'next/server'
+
+export function POST(request){
+  const body = await request.json();
+
+  // Validate
+  // If invalid, return 400
+  // Else return response data
+
+  if(!body.name)
+    return NextRequest.json({error:'Name is required'},{status:400});
+
+  return NextRequest.json({id:1,name:body.name});
+
   }
 ```
