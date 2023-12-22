@@ -59,7 +59,7 @@ export function POST(request){
   if(!body.name)
     return NextRequest.json({error:'Name is required'},{status:400});
 
-  return NextRequest.json({id:1,name:body.name});
+  return NextRequest.json({id:1,name:body.name},{status:201});
 
   }
 ```
