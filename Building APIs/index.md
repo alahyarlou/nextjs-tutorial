@@ -49,7 +49,7 @@ export function GET(request,{params}:{params:{id:number}){
 ```bash
 import { NextRequest } from 'next/server'
 
-export function POST(request){
+export async function POST(request){
   const body = await request.json();
 
   // Validate
@@ -60,6 +60,33 @@ export function POST(request){
     return NextRequest.json({error:'Name is required'},{status:400});
 
   return NextRequest.json({id:1,name:body.name},{status:201});
+
+  }
+```
+
+
+## Updating an Object
+- validate the request body
+- If invalid, return 400
+- Fetch the user with the given id
+- If doesn't exist, return 404
+- Update the user
+- Return updated the user
+
+---
+
+```bash
+import { NextRequest } from 'next/server'
+
+export async function PUT(request,{params}:{params:{id:number}){
+  
+  if(!body.name)
+    return NextRequest.json({error:'Name is required'},{status:400});
+
+  if(params.id>10)
+    return NextRequest.json({error:'User Not Found'},{status:404});
+
+  return NextRequest.json({id:1,name:body.name},{status:200});
 
   }
 ```
