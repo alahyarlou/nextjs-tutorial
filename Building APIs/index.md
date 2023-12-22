@@ -2,9 +2,9 @@
 
 In general, it is common add a folder named 'api' inside the app folder so that we can add our own routes inside it.
 
-well, first create a folder -> api
+well, first create a folder ```api```
 
-then, create own route for Example: route.js
+Then, create own route for Example: ``route.js``
 
 ## Route
 
@@ -14,25 +14,25 @@ then, create own route for Example: route.js
 
 we first talk about `GET` method:
 
-```bash
-import {NextResponse} from 'next/server'
+```js
+import { NextResponse } from "next/server";
 
-export function GET(request){
+export function GET(request) {
   return NextResponse.json([
-  {id:1,name:'Mosh'},
-  {id:2,name:'ali'}
-  ])
-  }
+    { id: 1, name: "Mosh" },
+    { id: 2, name: "ali" },
+  ]);
+}
 ```
 
 ## Getting Single Object
 
-create dynamic route for example: Folder([id])
+Create dynamic route for example: Folder([id])
 
-```bash
-import { NextRequest } from 'next/server'
+```js
+import { NextRequest } from 'next/server';
 
-export function GET(request,{params}:{params:{id:number}){
+export function GET(request,{params}){
   // fetching data from a db
   // If notFound retrun 404 an error
   // else return data
@@ -46,22 +46,21 @@ export function GET(request,{params}:{params:{id:number}){
 
 ## Creating an Object
 
-```bash
-import { NextRequest } from 'next/server'
+```js
+import { NextRequest } from "next/server";
 
-export async function POST(request){
+export async function POST(request) {
   const body = await request.json();
 
   // Validate
   // If invalid, return 400
   // Else return response data
 
-  if(!body.name)
-    return NextRequest.json({error:'Name is required'},{status:400});
+  if (!body.name)
+    return NextRequest.json({ error: "Name is required" }, { status: 400 });
 
-  return NextRequest.json({id:1,name:body.name},{status:201});
-
-  }
+  return NextRequest.json({ id: 1, name: body.name }, { status: 201 });
+}
 ```
 
 ## Updating an Object
@@ -75,8 +74,8 @@ export async function POST(request){
 
 ---
 
-```bash
-import { NextRequest } from 'next/server'
+```js
+import { NextRequest } from 'next/server';
 
 export async function PUT(request,{params}:{params:{id:number}){
 
@@ -100,8 +99,8 @@ export async function PUT(request,{params}:{params:{id:number}){
 
 ---
 
-```bash
-import { NextRequest } from 'next/server'
+```js
+import { NextRequest } from 'next/server';
 
 export async function DELETE(request,{params}:{params:{id:number}){
 
@@ -109,6 +108,53 @@ export async function DELETE(request,{params}:{params:{id:number}){
     return NextRequest.json({error:'User Not Found'},{status:404});
 
   return NextRequest.json({},{status:200});
+
+  }
+```
+
+## Validation Request with Zod
+
+you can learn about `zod` in [Zod](https://www.zod.dev) .
+
+first we go into terminal and install zod
+
+
+```js
+npm install zod
+```
+
+Then we create file called `schema.js` OR `schema.tsx`
+
+---
+
+```js
+import { z } from "zod";
+
+const schema = z.object({
+  name: z.string().min(3),
+});
+
+export default schema;
+```
+
+Now we go back to ouer route file then we import our `schema`.
+
+---
+
+```js
+import { NextRequest } from 'next/server';
+import schema from './schema';
+
+export async function PUT(request,{params}:{params:{id:number}){
+  const validation = schema.safeParse(body);
+
+  if(!validation.success)
+    return NextRequest.json(validation.error.errors,{status:400});
+
+  if(params.id>10)
+    return NextRequest.json({error:'User Not Found'},{status:404});
+
+  return NextRequest.json({id:1,name:body.name},{status:200});
 
   }
 ```
